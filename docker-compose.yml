@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: my_web_server
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/usr/share/nginx/html:ro
+    depends_on:
+      - git_clone
+
+  git_clone:
+    image: alpine:latest
+    container_name: git_clone
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "
+      apk add --no-cache git && 
+      git clone https://github.com/thiagoaraujo234/thiagoaraujo234.github.io /app && 
+      chown -R nginx:nginx /app
+      "
