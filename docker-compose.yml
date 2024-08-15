@@ -8,6 +8,8 @@ services:
       - "80:80"
     volumes:
       - ./app:/usr/share/nginx/html:ro
+    networks:
+      - webnet
     depends_on:
       - git_clone
 
@@ -16,9 +18,15 @@ services:
     container_name: git_clone
     volumes:
       - ./app:/app
+    networks:
+      - webnet
     command: >
       sh -c "
       apk add --no-cache git && 
       git clone https://github.com/thiagoaraujo234/thiagoaraujo234.github.io /app && 
       chown -R nginx:nginx /app
       "
+
+networks:
+  webnet:
+    driver: bridge
